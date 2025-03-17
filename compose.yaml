@@ -1,0 +1,19 @@
+services:
+  # chatbot:
+  #   build: ./chatbot
+  #   ports:
+  #     - "8080:5000"
+  #   cap_add:
+  #     - SYS_ADMIN
+  #   links:
+  #     - "coach:coachhost"
+
+  coach:
+    build: ./server
+    ports:
+      - "8080:2564"
+    volumes:
+      - ./server/source/:/source
+      - ./server/reference_csvs/:/references_csvs
+      - ./server/video_buffer/:/video_buffer
+      - ./server:/app
