@@ -1,0 +1,1 @@
+OK,✅ Feedback salvo em: output/feedback.txt
