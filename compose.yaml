@@ -1,0 +1,17 @@
+services:
+  chatbot:
+    build: ./chatbot
+    ports:
+      - "8080:5000"
+    cap_add:
+      - SYS_ADMIN
+    volumes:
+      - ./shared:/shared
+
+  coach:
+    build: ./coach
+    ports:
+      - "2564:2564"
+    volumes:
+       - ./shared:/shared
+
