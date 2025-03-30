@@ -1,7 +1,7 @@
-vb_f = 'video_buffer'
-output_f = 'output'
+vb_f = '../shared/videos_recebidos'
+output_f = '../shared/output'
 reference_csvs_f = 'reference_csvs'
-proc_f = 'processed'
+proc_f = '../shared/processed'
 
 video_name = 'video.mp4'
 csv_name = 'output.csv'
