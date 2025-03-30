@@ -43,16 +43,16 @@ class Coach():
         """
         action = self.actions[action_id]
         feedback_text = "="*50 + "\n"
-        feedback_text += f"🏆 AÇÃO ANALISADA: {action.label}\n"
+        feedback_text += f" AÇÃO ANALISADA: {action.label}\n"
         feedback_text += action.feedback+"\n"
         feedback_text += "="*50 + "\n\n"
 
         for movement in action.movements():
-            feedback_text += f"🔹 Movimento: {movement.label}\n"
-            feedback_text += f"   ➤ Feedback: {movement.get_feedback()}\n"
+            feedback_text += f" Movimento: {movement.label}\n"
+            feedback_text += f"    Feedback: {movement.get_feedback()}\n"
             feedback_text += "-"*50 + "\n"
 
-        feedback_text += "\n✅ Análise concluída!\n"
+        feedback_text += "\n Análise concluída!\n"
 
         feedback_path = os.path.join(self.output_path, "feedback.txt")
 
@@ -61,14 +61,14 @@ class Coach():
 
         # Verificar se o arquivo foi salvo corretamente
         if os.path.exists(feedback_path):
-            message = (f"✅ Feedback salvo em: {feedback_path}")
+            message = (f" Feedback salvo em: {feedback_path}")
         else:
-            message = ("❌ Erro: O feedback não foi gerado corretamente!")
+            message = (" Erro: O feedback não foi gerado corretamente!")
 
-        chosen_movement = action.movements()[0]
-        print(f"🎥 Contabilizando em vídeo o movimento: {chosen_movement.label}")
-        video_with_counter(chosen_movement.get_name(), action.classification_per_frame)
-        print("\n📁 Vídeo salvo em", output_video_path)
+        # chosen_movement = action.movements()[0]
+        # print(f" Contabilizando em vídeo o movimento: {chosen_movement.label}")
+        # video_with_counter(chosen_movement.get_name(), action.classification_per_frame)
+        # print("\n Vídeo salvo em", output_video_path)
 
         return message
 
