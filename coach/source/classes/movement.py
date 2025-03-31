@@ -30,6 +30,9 @@ class Movement():
         getter
         """
         return self._recognised
+    
+    def not_recognised(self):
+        self._feedback = "Movimento não reconhecido...\n"
 
 
     def verify(self,classification, frame_num):

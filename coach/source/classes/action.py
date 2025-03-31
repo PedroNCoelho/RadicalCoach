@@ -4,7 +4,7 @@ from .movement import *
 from .pose_classification import *
 
 class Action():
-    def __init__(self,movements=[],name="action is not named", pose_classifier = None, label = "", delay_tolerance = 3):
+    def __init__(self,movements=[],name="action is not named", pose_classifier = None, label = "", delay_tolerance = 50):
         self._movements = movements
         self.mv_frames = [None]*len(movements)
         self._recognised = False
@@ -75,11 +75,12 @@ class Action():
       mv_names = [mv.get_name() for mv in self._movements]
 
       classification_per_frame = []
-      for landmark in landmark_arr:
+      for i, landmark in enumerate(landmark_arr):
         if landmark is not None:
           pose_classification = self.pose_classifier(landmark, mv_names)
         else:
           pose_classification = None
+        # print("FRAME", i,":\n", pose_classification)
         classification_per_frame.append(pose_classification)
       self.classification_per_frame = classification_per_frame
 
@@ -89,12 +90,12 @@ class Action():
       # print(action_frames)
       if len(action_frames) > 0:
         # self.feedback = "Ação reconhecida com sucesso {} vez(es)!".format(len(action_frames))
-        self.feedback = "Ação reconhecida com sucesso!"
+        self.feedback = "Ação realizada com sucesso!"
         self._recognised = True
         for i in range(len(self.mv_frames)):
           self.mv_frames[i] = action_frames[0][i]
       else:
-        self.feedback = "Ação não reconhecida!"
+        self.feedback = "Ação não reconhecida..."
         self._recognised = False
         for i in range(len(self.mv_frames)):
           if mv_names[i] in detected_classes:
@@ -103,6 +104,8 @@ class Action():
       for i in range(len(self.mv_frames)):
         if self.mv_frames[i] is not None:
           self._movements[i].verify(classification_per_frame[self.mv_frames[i]], self.mv_frames[i])
+        else:
+          self._movements[i].not_recognised()
 
       # for movement in self._movements:
       #   for classification in classification_per_frame:
