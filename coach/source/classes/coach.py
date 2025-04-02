@@ -43,16 +43,16 @@ class Coach():
         """
         action = self.actions[action_id]
         feedback_text = "="*50 + "\n"
-        feedback_text += f" AÇÃO ANALISADA: {action.label}\n"
+        feedback_text += f"🏆 AÇÃO ANALISADA: {action.label}\n"
         feedback_text += action.feedback+"\n"
         feedback_text += "="*50 + "\n\n"
 
         for movement in action.movements():
-            feedback_text += f" Movimento: {movement.label}\n"
-            feedback_text += f"    Feedback: {movement.get_feedback()}\n"
+            feedback_text += f"🔹 Movimento: {movement.label}\n"
+            feedback_text += f"   ➤ Feedback: {movement.get_feedback()}\n"
             feedback_text += "-"*50 + "\n"
 
-        feedback_text += "\n Análise concluída!\n"
+        feedback_text += "\n✅ Análise concluída!\n"
 
         feedback_path = os.path.join(self.output_path, "feedback.txt")
 

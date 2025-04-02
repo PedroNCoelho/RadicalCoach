@@ -6,6 +6,8 @@ const path = require('path'); //manipula caminhos de arquivos
 const { execFile } = require('child_process'); //permite executar scripts externos
 const ffmpeg = require('fluent-ffmpeg'); //usado para análises de vídeo, como tempo de duração
 
+const { MessageMedia } = require('whatsapp-web.js');
+
 // ffmpeg.setFfprobePath("C:/ffmpeg/bin/ffprobe.exe");
 ffmpeg.setFfprobePath("ffmpeg");  //ajuste o caminho conforme sua instalação
 
@@ -182,7 +184,29 @@ client.on('message', async (msg) => {
                 acoes
             };
 
-            msg.reply(`✅ Você escolheu treinar *${acaoSelecionada}* no *${estadoUsuarios[numero].esporte}*!\n\n📹 Por favor, envie um vídeo de até *15 segundos* para continuarmos.`);
+            // msg.reply(`✅ Você escolheu treinar *${acaoSelecionada}* no *${estadoUsuarios[numero].esporte}*!\n\n📹 Por favor, envie um vídeo de até *15 segundos* para continuarmos.`);
+            msg.reply(`✅ Você escolheu treinar *${acaoSelecionada}* no *${estadoUsuarios[numero].esporte}*!\n\n`);
+            
+            // SEÇÃO ATUALMENTE MOCKADA, FALTA INTEGRAR!
+            msg.reply("Esses são os movimentos dessa manobra:")
+            const push_on_guide = '../shared/push_on_guide/'
+            
+            const media1 = MessageMedia.fromFilePath(push_on_guide+'prepare.png');
+            await client.sendMessage(msg.from, media1, { caption: 'Preparação do Impulso' });
+            
+            const media2 = MessageMedia.fromFilePath(push_on_guide+'boost_f1.png');  
+            await client.sendMessage(msg.from, media2, { caption: 'Início do Impulso' });
+            
+            const media3 = MessageMedia.fromFilePath(push_on_guide+'boost_f2.png');
+            await client.sendMessage(msg.from, media3, { caption: 'Auge do Impulso' });
+            
+            const media4 = MessageMedia.fromFilePath(push_on_guide+'boost_f3.png');
+            await client.sendMessage(msg.from, media4, { caption: 'Finalização do Impulso' });
+            
+            const media5 = MessageMedia.fromFilePath(push_on_guide+'recovery.png');
+            await client.sendMessage(msg.from, media5, { caption: 'Recuperação dos pés' });
+
+            msg.reply(`📹 Por favor, envie um vídeo de até *15 segundos* para continuarmos.`);
         } else {
             msg.reply("❌ Número inválido! Digite o número correspondente à ação desejada.");
         }
@@ -191,7 +215,7 @@ client.on('message', async (msg) => {
 
     //quando o usuário envia o vídeo
     if (estadoUsuarios[numero]?.estado === "aguardando_video" && msg.hasMedia) {
-	    msg.reply("aguardando vídeo teste")
+	    // msg.reply("aguardando vídeo teste")
 	    console.log("aguardando vídeo teste")
         //const pastaVideo = path.join("..","shared", 'video_buffer'); //pasta onde o vídeo será salvo
         const caminhoCompleto = path.join(pastaVideo, 'video.mp4'); //nome fixo do arquivo de vídeo
@@ -254,7 +278,7 @@ client.on('message', async (msg) => {
             console.error("Erro ao salvar vídeo:", err);
             msg.reply("❌ Ocorreu um erro ao processar o vídeo. Tente novamente.");
         }
-	msg.reply("parou no return")
+	// msg.reply("parou no return")
 	console.log("parou no return")
         return;
     }

@@ -18,7 +18,7 @@ def parse_facade():
     command and corresponding arguments
     """
     try:
-        file = open("/shared/coach_cmd_args.txt", "r")
+        file = open("../shared/coach_cmd_args.txt", "r")
         if not file.readable():
             raise FileNotReadableError("parse_facade")
         # expect arguments to be "split" by " "(empty spaces)
@@ -53,7 +53,7 @@ class CoachCLI:
         create and write the command output after running it
         through a handler
         """
-        file = open("/shared/coach_ans.txt","x")
+        file = open("../shared/coach_ans.txt","x")
         file.write(str(self._run(cmd,args)))
         file.close()
         return
@@ -63,7 +63,7 @@ class CoachCLI:
         write the command output after running it
         through a handler
         """
-        file = open("/shared/coach_ans.txt","w")
+        file = open("../shared/coach_ans.txt","w")
         file.write(str(self._run(cmd,args)))
         file.close()
         return
