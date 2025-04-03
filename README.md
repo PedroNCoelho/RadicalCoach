@@ -4,4 +4,4 @@
 
 ## the chatbot directory contains the frontend logic
 
-## in the shared directory a facade file can be found, coach_facade.py this file implements the Facade pattern, reference: https://refactoring.guru/design-patterns/facade
+## the shared directory contains coach_facade.py this file implements the Facade pattern, reference: https://refactoring.guru/design-patterns/facade
