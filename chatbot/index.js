@@ -42,7 +42,7 @@ client.on('message', async (msg) => {
     //se o usuário for novo ou ainda não começou, envia mensagem de boas-vindas
     if (!estadoUsuarios[numero]) {
         estadoUsuarios[numero] = { estado: "aguardando_confirmacao" };
-        msg.reply(`🎯 *Bem-vindo ao RadicalCoach!* 🎯\n\nEstou aqui para te ajudar a evoluir nas suas manobras de forma inteligente! 🛹🔥\n\nDeseja começar escolhendo um esporte? (responda com *sim* ou *não*)`);
+        msg.reply(`🎯 *Bem-vindo ao RadicalCoach!* 🎯\n\nEstou aqui para te ajudar a evoluir nas suas manobras de forma inteligente! 🛹🔥\n\nDeseja começar escolhendo uma ação? (responda com *sim* ou *não*)`);
         return;
     }
 
@@ -56,61 +56,15 @@ client.on('message', async (msg) => {
     //reinicia o menu
     if (texto === "menu") {
         estadoUsuarios[numero] = { estado: "aguardando_confirmacao" };
-        msg.reply(`🎯 *Bem-vindo ao RadicalCoach!* 🎯\n\nDeseja começar escolhendo um esporte? (responda com *sim* ou *não*)`);
+        msg.reply(`🎯 *Bem-vindo ao RadicalCoach!* 🎯\n\nDeseja começar escolhendo uma ação? (responda com *sim* ou *não*)`);
         return;
     }
 
-    //se o usuário responder "sim", o bot busca os esportes disponíveis
-    if (texto === "sim" && estadoUsuarios[numero]?.estado === "aguardando_confirmacao") {
-	console.log("sim")
-        execFile(pythonPath, [scriptPath, "show_sports"], (error, stdout) => {
-            if (error) {
-                console.error("Erro ao executar show_sports:", error);
-                msg.reply("❌ Erro ao carregar os esportes disponíveis.");
-                return;
-            }
-
-            try {
-                //trata o retorno do show_sports (string hardcoded)
-                const raw = stdout.toString().trim().replace(/^\['/, '').replace(/'\]$/, '');
-                const partes = raw.split(":");
-
-                if (!partes[1]) {
-                    msg.reply("⚠️ Nenhum esporte encontrado.");
-                    return;
-                }
-
-                //cria array com esportes
-                const esportes = partes[1].split(",").map(e => e.trim());
-
-                //atualiza o estado do usuário
-                estadoUsuarios[numero] = {
-                    estado: "escolhendo_esporte",
-                    esportes
-                };
-
-                //envia as opções para o usuário
-                let textoFormatado = "📋 *Esportes disponíveis:*\n\n";
-                esportes.forEach((esporte, idx) => {
-                    textoFormatado += `*${idx + 1}.* ${esporte}\n`;
-                });
-                textoFormatado += "\nDigite o *número* do esporte para selecionar.";
-                msg.reply(textoFormatado);
-            } catch (err) {
-                console.error("Erro ao processar lista de esportes:", err);
-                msg.reply("⚠️ Ocorreu um erro ao tratar os esportes.");
-            }
-        });
-        return;
-    }
 
     //quando o usuário escolhe o esporte
-    if (estadoUsuarios[numero]?.estado === "escolhendo_esporte" && !isNaN(texto)) {
-        const index = parseInt(texto) - 1;
-        const esportes = estadoUsuarios[numero].esportes;
+    if (texto === "sim" && estadoUsuarios[numero]?.estado === "aguardando_confirmacao") {
 
-        if (index >= 0 && index < esportes.length) {
-            const esporteSelecionado = esportes[index];
+            const esporteSelecionado = "skate"
 
             //chama select_sport no back
             execFile(pythonPath, [scriptPath, "select_sport", esporteSelecionado], (error) => {
@@ -162,9 +116,6 @@ client.on('message', async (msg) => {
                     }
                 });
             });
-        } else {
-            msg.reply("❌ Número inválido! Digite o número correspondente ao esporte desejado.");
-        }
         return;
     }
 
