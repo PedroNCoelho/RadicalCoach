@@ -18,7 +18,7 @@ def parse_facade():
     command and corresponding arguments
     """
     try:
-        file = open("../shared/coach_cmd_args.txt", "r")
+        file = open(cmd_args_path, "r")
         if not file.readable():
             raise FileNotReadableError("parse_facade")
         # expect arguments to be "split" by " "(empty spaces)
@@ -53,7 +53,7 @@ class CoachCLI:
         create and write the command output after running it
         through a handler
         """
-        file = open("../shared/coach_ans.txt","x")
+        file = open(coach_ans_path,"x")
         file.write(str(self._run(cmd,args)))
         file.close()
         return
@@ -63,7 +63,7 @@ class CoachCLI:
         write the command output after running it
         through a handler
         """
-        file = open("../shared/coach_ans.txt","w")
+        file = open(coach_ans_path,"w")
         file.write(str(self._run(cmd,args)))
         file.close()
         return
@@ -109,10 +109,6 @@ class CoachCLI:
         validation happens elsewhere
         """
         if self.coach:
-            # actions = self.coach.get_action_labels()
-            # actions_collection = ""
-            # for _, action in enumerate(actions):
-            #     actions_collection+= ","+ str(action)
             actions_collection = str(self.coach.get_action_labels())
             return format_success(actions_collection)
         else:
@@ -142,6 +138,8 @@ class CoachCLI:
         print("Processando o novo vídeo...")
         reset_folder(proc_f)
         video_cap = cv2.VideoCapture(video_path)
+        global global_fps
+        global_fps = video_cap.get(cv2.CAP_PROP_FPS)
         pose_tracker = mp_pose.Pose()
         proc_video = cv2.VideoWriter(proc_video_path, cv2.VideoWriter_fourcc(*'mp4v'),
                                      video_cap.get(cv2.CAP_PROP_FPS),

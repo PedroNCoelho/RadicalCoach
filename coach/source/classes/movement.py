@@ -1,3 +1,4 @@
+global_fps = 30.0
 
 class Movement():
     def __init__(self, name="",feedback="(Não foi gerado feedback)", frames_to_consider = 0, label = ""):
@@ -6,6 +7,7 @@ class Movement():
         self._feedback = feedback
         self._recognised = False
         self.label = label
+        self.frame_num = None
 
     def get_name(self):
         """
@@ -37,6 +39,7 @@ class Movement():
 
     def verify(self,classification, frame_num):
       self._recognised = True
-      self._feedback = "Movimento executado corretamente no instante {:.1f}s!\n".format(frame_num/30.)
+      self._feedback = "Movimento executado corretamente no instante {:.1f}s!\n".format(frame_num/global_fps)
     #   self._feedback = "Movimento reconhecido no frame {}\n".format(frame_num)
     #   self._feedback += "O movimento está a uma distância de {} unidades do esperado\n".format(classification["mean_dist"])
+      self.frame_num = frame_num

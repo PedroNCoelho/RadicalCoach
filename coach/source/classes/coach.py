@@ -42,6 +42,7 @@ class Coach():
         Cria um arquivo de feedback visualmente mais estruturado.
         """
         action = self.actions[action_id]
+
         feedback_text = "="*50 + "\n"
         feedback_text += f"🏆 AÇÃO ANALISADA: {action.label}\n"
         feedback_text += action.feedback+"\n"
@@ -61,43 +62,18 @@ class Coach():
 
         # Verificar se o arquivo foi salvo corretamente
         if os.path.exists(feedback_path):
-            message = (f" Feedback salvo em: {feedback_path}")
+            message = (f"Feedback salvo em: {feedback_path}")
         else:
-            message = (" Erro: O feedback não foi gerado corretamente!")
+            message = ("Erro: O feedback não foi gerado corretamente!")
 
-        # chosen_movement = action.movements()[0]
-        # print(f" Contabilizando em vídeo o movimento: {chosen_movement.label}")
-        # video_with_counter(chosen_movement.get_name(), action.classification_per_frame)
-        # print("\n Vídeo salvo em", output_video_path)
+        output_video_path = os.path.join(self.output_path, "feedback_video.mp4")
+        # Chama a função para gerar o vídeo com feedbacks no momento certo
+        video_with_feedback(
+            action.movements(),
+            self.proc_video_path,  # Passando o caminho do vídeo processado
+            output_video_path  # Passando o caminho do vídeo de saída
+        )
+
+        print("\nVídeo salvo em", output_video_path)
 
         return message
-
-
-    # def generate_feedback(self, action_id):
-    #     """
-    #     Cria um arquivo de feedback no caminho de saída.
-    #     """
-    #     # feedback_text = "Feedback gerado com sucesso!"  # Placeholder
-    #     action = self.actions[action_id]
-    #     feedback_text = f"Ação: {action.label}\n"+action.feedback+"\n"
-    #     for movement in action.movements():
-    #         feedback_text += f"  Movimento: {movement.label}\n"
-    #         feedback_text += f"    Feedback: {movement.get_feedback()}\n"
-
-    #     feedback_path = os.path.join(self.output_path, "feedback.txt")
-
-    #     with open(feedback_path, "w") as f:
-    #         f.write(feedback_text)
-
-    #     # Verificar se o arquivo foi salvo corretamente
-    #     if os.path.exists(feedback_path):
-    #         print(f"Feedback salvo em: {feedback_path}")
-    #     else:
-    #         print("Erro: O feedback não foi gerado corretamente!")
-
-    #     chosen_moviment = action.movements()[0]
-    #     print("Contabilizando em vídeo o movimento", chosen_moviment.label)
-    #     video_with_counter(chosen_moviment.get_name(), action.classification_per_frame)
-    #     print("\nVídeo salvo em", output_video_path)
-
-    #     return feedback_path

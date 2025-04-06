@@ -6,7 +6,6 @@ from .pose_classification import *
 class Action():
     def __init__(self,movements=[],name="action is not named", pose_classifier = None, label = "", delay_tolerance = 50):
         self._movements = movements
-        self.mv_frames = [None]*len(movements)
         self._recognised = False
         self._name = name
         self.pose_classifier = pose_classifier
@@ -92,23 +91,15 @@ class Action():
         # self.feedback = "Ação reconhecida com sucesso {} vez(es)!".format(len(action_frames))
         self.feedback = "Ação realizada com sucesso!"
         self._recognised = True
-        for i in range(len(self.mv_frames)):
-          self.mv_frames[i] = action_frames[0][i]
+        for i, movement in enumerate(self._movements):
+          frame_num = action_frames[0][i]
+          movement.verify(classification_per_frame[frame_num], frame_num)
       else:
         self.feedback = "Ação não reconhecida..."
         self._recognised = False
-        for i in range(len(self.mv_frames)):
+        for i, movement in enumerate(self._movements):
           if mv_names[i] in detected_classes:
-            self.mv_frames[i] = detected_classes.index(mv_names[i])
-
-      for i in range(len(self.mv_frames)):
-        if self.mv_frames[i] is not None:
-          self._movements[i].verify(classification_per_frame[self.mv_frames[i]], self.mv_frames[i])
-        else:
-          self._movements[i].not_recognised()
-
-      # for movement in self._movements:
-      #   for classification in classification_per_frame:
-      #     if movement.get_name() in classification["class"]:
-      #       movement.verify(classification)
-      #       break
+            frame_num = detected_classes.index(mv_names[i])
+            movement.verify(classification_per_frame[frame_num], frame_num)
+          else:
+            movement.not_recognised()

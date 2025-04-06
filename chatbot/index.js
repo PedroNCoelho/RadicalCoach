@@ -204,16 +204,20 @@ client.on('message', async (msg) => {
 
                     //aguarda até que o arquivo de feedback seja gerado
                     const feedbackFile = path.join('..', 'shared/output' , 'feedback.txt');
+                    const feedbackVideo = path.join('..', 'shared/output' , 'feedback_video.mp4');
                     let attempts = 0;
 
                     const checkFile = setInterval(() => {
-                        if (fs.existsSync(feedbackFile)) {
+                        if (fs.existsSync(feedbackVideo)) {
                             const conteudo = fs.readFileSync(feedbackFile, 'utf8');
                             if (conteudo.trim().length > 0) {
                                 clearInterval(checkFile);
                                 msg.reply("✅ *Análise concluída!*\n\n📈 Aqui está seu feedback personalizado:\n\n" + conteudo);
                                 estadoUsuarios[numero] = null;
                             }
+                            msg.reply("📹 E aqui está o acompanhamento das ações no vídeo:");
+                            const fmedia = MessageMedia.fromFilePath(feedbackVideo);
+                            client.sendMessage(msg.from, fmedia, {sendMediaAsDocument: true});
                         }
 
                         attempts++;
