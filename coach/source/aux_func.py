@@ -89,27 +89,31 @@ def video_with_feedback(movements, proc_video_path, output_video_path):
                 break
 
             output_frame = cv2.cvtColor(input_frame, cv2.COLOR_BGR2RGB)
-            output_frame = np.array(output_frame)
+            output_frame = Image.fromarray(np.array(output_frame))
+
+            draw = ImageDraw.Draw(output_frame)
+            font = ImageFont.truetype("Arial.ttf", int(video_height*0.025))
+
+            base_x = 50
+            base_y = 100
+            line_spacing = int(video_height*0.05)
 
             for i, movement in enumerate(movements):
-              if movement.frame_num is not None and frame_idx >= movement.frame_num:
-                feedback_to_show = movement.label+" detectado!"
-                color = (0, 255, 0) # Cor (verde)
-              else:
-                feedback_to_show = movement.label+" ainda não detectado..."
-                color = (83, 83, 83) # Cor (ciza)
+                if movement.frame_num is not None and frame_idx >= movement.frame_num:
+                    feedback_to_show = f"{movement.label} detectado!"
+                    color = (100, 255, 100)  # Texto branco
+                else:
+                    feedback_to_show = f"{movement.label} ainda não detectado..."
+                    color = (200, 200, 200)  # Texto cinza claro
+                
+                position = (base_x, base_y + i * line_spacing)
 
-              cv2.putText(
-                  output_frame,
-                  feedback_to_show,
-                  (50, 100+i*30),  # Posição do texto no vídeo
-                  cv2.FONT_HERSHEY_SIMPLEX,
-                  0.8,  # Tamanho da fonte
-                  color,
-                  2,  # Espessura
-                  cv2.LINE_AA,
-              )
+                left, top, right, bottom = draw.textbbox(position, feedback_to_show, font=font)
+                draw.rectangle((left-5, top-5, right+5, bottom+5), fill="black")
+                draw.text(position, feedback_to_show, fill=color, font=font)
 
+
+            output_frame = np.asarray(output_frame)
             out_video.write(cv2.cvtColor(output_frame, cv2.COLOR_RGB2BGR))
 
             frame_idx += 1
